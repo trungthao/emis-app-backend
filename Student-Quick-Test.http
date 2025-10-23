@@ -1,0 +1,193 @@
+### Quick Test with Seeded Data
+### API này sử dụng dữ liệu đã được seed sẵn trong database
+
+@baseUrl = http://localhost:5001/api
+
+###############################################################################
+# QUICK TESTS - Sử dụng dữ liệu có sẵn
+###############################################################################
+
+### 1. Get All Classes (Xem lớp đã được seed)
+GET {{baseUrl}}/classes?onlyActive=true
+Accept: application/json
+
+### Response sẽ trả về các lớp đã seed:
+# - Nhà trẻ (18-36 tháng)
+# - Mẫu giáo nhỏ (3-4 tuổi)
+# - Mẫu giáo lớn (4-5 tuổi)
+# - Lá (5-6 tuổi)
+# Copy một Class ID để dùng cho test tiếp theo
+
+###
+
+### 2. Get All Students (Xem học sinh đã seed)
+GET {{baseUrl}}/students
+Accept: application/json
+
+### Response sẽ trả về 5 học sinh đã seed
+# Copy một Student ID để test
+
+###
+
+### 3. Create New Student - Simple (Không phụ huynh, không lớp)
+POST {{baseUrl}}/students
+Content-Type: application/json
+
+{
+  "studentCode": "HS2025010",
+  "firstName": "Hải",
+  "lastName": "Vũ Minh",
+  "dateOfBirth": "2020-11-25",
+  "gender": 0,
+  "enrollmentDate": "2025-09-01",
+  "address": "100 Nguyễn Văn Cừ, Quận 5, TP.HCM",
+  "phone": "0908888888"
+}
+
+### Sau khi tạo thành công, copy "id" từ response để dùng cho các test sau
+
+###
+
+### 4. Add Parent to Student (Thêm phụ huynh cho học sinh vừa tạo)
+# Thay STUDENT_ID bằng ID từ response ở bước 3
+POST {{baseUrl}}/students/STUDENT_ID/parents
+Content-Type: application/json
+
+{
+  "firstName": "Lan",
+  "lastName": "Nguyễn Thị",
+  "gender": 1,
+  "phone": "0909999999",
+  "email": "nguyenthilan@email.com",
+  "relationshipType": 2,
+  "isPrimaryContact": true,
+  "canPickUp": true,
+  "receiveNotifications": true
+}
+
+###
+
+### 5. Assign Student to Class (Phân lớp)
+# Thay STUDENT_ID và CLASS_ID từ responses trước
+POST {{baseUrl}}/students/STUDENT_ID/assign-class
+Content-Type: application/json
+
+{
+  "classId": "CLASS_ID",
+  "notes": "Học sinh mới nhập học"
+}
+
+###
+
+### 6. Get Student Detail (Xem đầy đủ thông tin)
+# Thay STUDENT_ID
+GET {{baseUrl}}/students/STUDENT_ID
+Accept: application/json
+
+### Response sẽ bao gồm:
+# - Thông tin học sinh
+# - Phụ huynh (nếu có)
+# - Lớp học (nếu có)
+
+###
+
+### 7. Update Student Info (Cập nhật thông tin)
+PUT {{baseUrl}}/students/STUDENT_ID
+Content-Type: application/json
+
+{
+  "firstName": "Hải",
+  "lastName": "Vũ Minh",
+  "dateOfBirth": "2020-11-25",
+  "gender": 0,
+  "address": "200 Lê Văn Việt, Quận 9, TP.HCM",
+  "phone": "0908888888",
+  "bloodType": "B+",
+  "allergies": "Dị ứng phấn hoa"
+}
+
+###
+
+### 8. Health Check
+GET http://localhost:5001/health
+Accept: application/json
+
+###############################################################################
+# COMPLETE WORKFLOW - Tạo học sinh hoàn chỉnh trong 1 request
+###############################################################################
+
+### 9. Create Complete Student Profile (Tất cả trong 1 lần)
+# Thay CLASS_ID bằng ID từ bước 1
+POST {{baseUrl}}/students
+Content-Type: application/json
+
+{
+  "studentCode": "HS2025011",
+  "firstName": "Phương",
+  "lastName": "Lê Thị",
+  "dateOfBirth": "2021-02-14",
+  "gender": 1,
+  "address": "50 Đinh Tiên Hoàng, Quận 1, TP.HCM",
+  "phone": "0907777777",
+  "enrollmentDate": "2025-09-01",
+  "bloodType": "A+",
+  "classId": "CLASS_ID",
+  "parents": [
+    {
+      "firstName": "Tuấn",
+      "lastName": "Lê Văn",
+      "dateOfBirth": "1985-05-10",
+      "gender": 0,
+      "phone": "0911111111",
+      "email": "levantuan@email.com",
+      "address": "50 Đinh Tiên Hoàng, Quận 1, TP.HCM",
+      "occupation": "Kiến trúc sư",
+      "workPlace": "Công ty XYZ",
+      "relationshipType": 1,
+      "isPrimaryContact": true,
+      "canPickUp": true,
+      "receiveNotifications": true
+    },
+    {
+      "firstName": "Hương",
+      "lastName": "Trần Thị",
+      "dateOfBirth": "1987-08-20",
+      "gender": 1,
+      "phone": "0922222222",
+      "email": "tranthihuong@email.com",
+      "address": "50 Đinh Tiên Hoàng, Quận 1, TP.HCM",
+      "occupation": "Bác sĩ",
+      "workPlace": "Bệnh viện ABC",
+      "relationshipType": 2,
+      "isPrimaryContact": false,
+      "canPickUp": true,
+      "receiveNotifications": true
+    }
+  ]
+}
+
+### Response sẽ có đầy đủ thông tin học sinh đã được tạo
+### Kiểm tra lại bằng GET /students/{id}
+
+###############################################################################
+# NOTES
+###############################################################################
+
+# Dữ liệu đã được seed:
+# ✅ 4 Grades (Nhà trẻ, Mẫu giáo nhỏ, Mẫu giáo lớn, Lá)
+# ✅ 8 Classes (2 lớp cho mỗi grade)
+# ✅ 5 Students
+# ✅ 4 Parents
+# ✅ Parent-Student relationships
+
+# Tips:
+# 1. Chạy test #1 trước để lấy Class IDs
+# 2. Chạy test #2 để xem Students đã có
+# 3. Test #3-7 để tạo và quản lý student mới
+# 4. Test #9 để tạo student hoàn chỉnh một lần
+
+# Validation:
+# - studentCode phải unique
+# - phone format: 10-11 số
+# - email format: valid email
+# - Lớp phải còn chỗ trống

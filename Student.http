@@ -1,0 +1,285 @@
+### Student Service API Tests
+### Base URL
+@baseUrl = http://localhost:5001
+@apiPrefix = {{baseUrl}}/api
+
+### Variables (sẽ được cập nhật sau mỗi request)
+@studentId = 
+@parentId = 
+@classId = 
+
+###############################################################################
+# CLASSES API
+###############################################################################
+
+### 1. Get All Classes (Active only)
+GET {{apiPrefix}}/classes?onlyActive=true
+Accept: application/json
+
+### 2. Get All Classes (Include Inactive)
+GET {{apiPrefix}}/classes?onlyActive=false
+Accept: application/json
+
+### 3. Get Classes by Grade
+GET {{apiPrefix}}/classes?gradeId=GRADE_ID_HERE&onlyActive=true
+Accept: application/json
+
+### 4. Get Class by ID
+GET {{apiPrefix}}/classes/CLASS_ID_HERE
+Accept: application/json
+
+###############################################################################
+# STUDENTS API
+###############################################################################
+
+### 5. Create Student (Without Parents, Without Class)
+POST {{apiPrefix}}/students
+Content-Type: application/json
+
+{
+  "studentCode": "HS2025001",
+  "firstName": "Minh",
+  "lastName": "Nguyễn Văn",
+  "dateOfBirth": "2020-05-15T00:00:00",
+  "gender": 0,
+  "placeOfBirth": "Hà Nội",
+  "address": "123 Đường ABC, Quận 1, TP.HCM",
+  "phone": "0901234567",
+  "email": "nguyenvanminh@email.com",
+  "enrollmentDate": "2025-09-01T00:00:00",
+  "bloodType": "O+",
+  "allergies": "Không có",
+  "medicalNotes": "Khỏe mạnh"
+}
+
+### 6. Create Student WITH Parents (No Class)
+POST {{apiPrefix}}/students
+Content-Type: application/json
+
+{
+  "studentCode": "HS2025002",
+  "firstName": "Lan",
+  "lastName": "Trần Thị",
+  "dateOfBirth": "2021-03-20T00:00:00",
+  "gender": 1,
+  "placeOfBirth": "TP.HCM",
+  "address": "456 Đường XYZ, Quận 2, TP.HCM",
+  "phone": "0907654321",
+  "enrollmentDate": "2025-09-01T00:00:00",
+  "bloodType": "A+",
+  "parents": [
+    {
+      "firstName": "Hùng",
+      "lastName": "Trần Văn",
+      "dateOfBirth": "1990-01-15T00:00:00",
+      "gender": 0,
+      "phone": "0912345678",
+      "email": "tranvanhung@email.com",
+      "address": "456 Đường XYZ, Quận 2, TP.HCM",
+      "occupation": "Kỹ sư",
+      "workPlace": "Công ty ABC",
+      "relationshipType": 1,
+      "isPrimaryContact": true,
+      "canPickUp": true,
+      "receiveNotifications": true
+    },
+    {
+      "firstName": "Mai",
+      "lastName": "Nguyễn Thị",
+      "dateOfBirth": "1992-05-20T00:00:00",
+      "gender": 1,
+      "phone": "0923456789",
+      "email": "nguyenthimai@email.com",
+      "address": "456 Đường XYZ, Quận 2, TP.HCM",
+      "occupation": "Giáo viên",
+      "workPlace": "Trường XYZ",
+      "relationshipType": 2,
+      "isPrimaryContact": false,
+      "canPickUp": true,
+      "receiveNotifications": true
+    }
+  ]
+}
+
+### 7. Create Student WITH Parents AND Class
+POST {{apiPrefix}}/students
+Content-Type: application/json
+
+{
+  "studentCode": "HS2025003",
+  "firstName": "An",
+  "lastName": "Lê Văn",
+  "dateOfBirth": "2020-08-10T00:00:00",
+  "gender": 0,
+  "enrollmentDate": "2025-09-01T00:00:00",
+  "classId": "REPLACE_WITH_REAL_CLASS_ID",
+  "parents": [
+    {
+      "firstName": "Tuấn",
+      "lastName": "Lê Văn",
+      "gender": 0,
+      "phone": "0934567890",
+      "email": "levantuan@email.com",
+      "relationshipType": 1,
+      "isPrimaryContact": true,
+      "canPickUp": true,
+      "receiveNotifications": true
+    }
+  ]
+}
+
+### 8. Get Student by ID
+GET {{apiPrefix}}/students/STUDENT_ID_HERE
+Accept: application/json
+
+### 9. Get All Students
+GET {{apiPrefix}}/students
+Accept: application/json
+
+### 10. Update Student (Basic Info)
+PUT {{apiPrefix}}/students/STUDENT_ID_HERE
+Content-Type: application/json
+
+{
+  "firstName": "Minh",
+  "lastName": "Nguyễn Văn",
+  "dateOfBirth": "2020-05-15T00:00:00",
+  "gender": 0,
+  "placeOfBirth": "Hà Nội",
+  "address": "789 Đường Mới, Quận 3, TP.HCM",
+  "phone": "0901234567",
+  "email": "nguyenvanminh.updated@email.com",
+  "bloodType": "O+",
+  "allergies": "Dị ứng hải sản",
+  "medicalNotes": "Cần theo dõi"
+}
+
+### 11. Update Student AND Change Class
+PUT {{apiPrefix}}/students/STUDENT_ID_HERE
+Content-Type: application/json
+
+{
+  "firstName": "Minh",
+  "lastName": "Nguyễn Văn",
+  "dateOfBirth": "2020-05-15T00:00:00",
+  "gender": 0,
+  "address": "789 Đường Mới, Quận 3, TP.HCM",
+  "phone": "0901234567",
+  "classId": "NEW_CLASS_ID_HERE"
+}
+
+### 12. Delete Student (Soft Delete)
+DELETE {{apiPrefix}}/students/STUDENT_ID_HERE
+
+###############################################################################
+# STUDENT - CLASS ASSIGNMENT
+###############################################################################
+
+### 13. Assign Student to Class
+POST {{apiPrefix}}/students/STUDENT_ID_HERE/assign-class
+Content-Type: application/json
+
+{
+  "classId": "CLASS_ID_HERE",
+  "joinDate": "2025-09-01T00:00:00",
+  "notes": "Học sinh chuyển từ lớp khác"
+}
+
+###############################################################################
+# STUDENT - PARENT MANAGEMENT
+###############################################################################
+
+### 14. Add Parent to Student
+POST {{apiPrefix}}/students/STUDENT_ID_HERE/parents
+Content-Type: application/json
+
+{
+  "firstName": "Bình",
+  "lastName": "Phạm Văn",
+  "dateOfBirth": "1988-10-10T00:00:00",
+  "gender": 0,
+  "phone": "0945678901",
+  "email": "phamvanbinh@email.com",
+  "address": "999 Đường DEF, Quận 5, TP.HCM",
+  "occupation": "Bác sĩ",
+  "workPlace": "Bệnh viện ABC",
+  "relationshipType": 3,
+  "isPrimaryContact": false,
+  "canPickUp": true,
+  "receiveNotifications": true
+}
+
+### 15. Update Parent-Student Relationship
+PUT {{apiPrefix}}/students/STUDENT_ID_HERE/parents/PARENT_ID_HERE
+Content-Type: application/json
+
+{
+  "relationshipType": 1,
+  "isPrimaryContact": true,
+  "canPickUp": true,
+  "receiveNotifications": false
+}
+
+### 16. Remove Parent from Student
+DELETE {{apiPrefix}}/students/STUDENT_ID_HERE/parents/PARENT_ID_HERE
+
+###############################################################################
+# HEALTH CHECK
+###############################################################################
+
+### 17. Health Check
+GET {{baseUrl}}/health
+Accept: application/json
+
+###############################################################################
+# NOTES & QUICK REFERENCE
+###############################################################################
+
+# Gender:
+# - 0 = Male (Nam)
+# - 1 = Female (Nữ)
+
+# RelationshipType:
+# - 1 = Father (Cha)
+# - 2 = Mother (Mẹ)
+# - 3 = Guardian (Người giám hộ)
+# - 4 = Grandparent (Ông/Bà)
+# - 5 = Other (Khác)
+
+# ClassStatus:
+# - 1 = Active
+# - 2 = Inactive
+# - 3 = Completed
+
+# StudentStatus:
+# - 1 = Active
+# - 2 = Inactive
+# - 3 = Graduated
+# - 4 = Transferred
+
+###############################################################################
+# WORKFLOW EXAMPLES
+###############################################################################
+
+### Example Workflow 1: Create Complete Student Profile
+# 1. Get available classes: GET /api/classes?onlyActive=true
+# 2. Create student with parents and class: POST /api/students (use #7)
+# 3. Verify: GET /api/students/{id}
+
+### Example Workflow 2: Add Parent Later
+# 1. Create student without parent: POST /api/students (use #5)
+# 2. Add parent: POST /api/students/{id}/parents (use #14)
+# 3. Verify: GET /api/students/{id}
+
+### Example Workflow 3: Transfer Student to New Class
+# 1. Get new class: GET /api/classes
+# 2. Assign to new class: POST /api/students/{id}/assign-class (use #13)
+# 3. Verify: GET /api/students/{id}
+
+###############################################################################
+# How to use this file:
+# 1. Install "REST Client" extension in VS Code
+# 2. Update variables at the top (@studentId, @classId, etc.) after creating resources
+# 3. Click "Send Request" above each ### separator
+# 4. View response in the right panel
+###############################################################################
