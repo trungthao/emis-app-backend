@@ -1,0 +1,196 @@
+version: '3.8'
+
+services:
+  # MySQL Database for Student Service
+  studentdb:
+    image: mysql:8.0
+    container_name: emis-student-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: EMIS_StudentDB
+      MYSQL_USER: emisuser
+      MYSQL_PASSWORD: emispassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - student-db-data:/var/lib/mysql
+    networks:
+      - emis-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: --default-authentication-plugin=mysql_native_password
+
+  # MySQL Database for Teacher Service
+  teacherdb:
+    image: mysql:8.0
+    container_name: emis-teacher-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: EMIS_TeacherDB
+      MYSQL_USER: emisuser
+      MYSQL_PASSWORD: emispassword
+    ports:
+      - "3307:3306"
+    volumes:
+      - teacher-db-data:/var/lib/mysql
+    networks:
+      - emis-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: --default-authentication-plugin=mysql_native_password
+
+  # MySQL Database for Attendance Service
+  attendancedb:
+    image: mysql:8.0
+    container_name: emis-attendance-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: EMIS_AttendanceDB
+      MYSQL_USER: emisuser
+      MYSQL_PASSWORD: emispassword
+    ports:
+      - "3308:3306"
+    volumes:
+      - attendance-db-data:/var/lib/mysql
+    networks:
+      - emis-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: --default-authentication-plugin=mysql_native_password
+
+  # MySQL Database for Fee Management Service
+  feedb:
+    image: mysql:8.0
+    container_name: emis-fee-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: EMIS_FeeDB
+      MYSQL_USER: emisuser
+      MYSQL_PASSWORD: emispassword
+    ports:
+      - "3309:3306"
+    volumes:
+      - fee-db-data:/var/lib/mysql
+    networks:
+      - emis-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: --default-authentication-plugin=mysql_native_password
+
+  # MongoDB for Messaging Service
+  messagingdb:
+    image: mongo:7
+    container_name: emis-messaging-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: EMIS_MessagingDB
+    ports:
+      - "27017:27017"
+    volumes:
+      - messaging-db-data:/data/db
+    networks:
+      - emis-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: emis-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - emis-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # RabbitMQ Message Broker
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: emis-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    ports:
+      - "5672:5672"   # AMQP protocol
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - emis-network
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # Student Service API (Uncomment when Dockerfile is ready)
+  # student-api:
+  #   build:
+  #     context: .
+  #     dockerfile: src/Services/StudentService/Student.API/Dockerfile
+  #   container_name: emis-student-api
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://+:80
+  #     - ConnectionStrings__DefaultConnection=Server=studentdb;Port=3306;Database=EMIS_StudentDB;User=emisuser;Password=emispassword;
+  #     - RabbitMQ__Host=rabbitmq
+  #     - Redis__ConnectionString=redis:6379
+  #   ports:
+  #     - "5001:80"
+  #   depends_on:
+  #     - studentdb
+  #     - rabbitmq
+  #     - redis
+  #   networks:
+  #     - emis-network
+
+  # API Gateway (Uncomment when implemented)
+  # api-gateway:
+  #   build:
+  #     context: .
+  #     dockerfile: src/ApiGateway/Dockerfile
+  #   container_name: emis-api-gateway
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://+:80
+  #   ports:
+  #     - "5000:80"
+  #   depends_on:
+  #     - student-api
+  #   networks:
+  #     - emis-network
+
+volumes:
+  student-db-data:
+  teacher-db-data:
+  attendance-db-data:
+  fee-db-data:
+  messaging-db-data:
+  redis-data:
+  rabbitmq-data:
+
+networks:
+  emis-network:
+    driver: bridge
