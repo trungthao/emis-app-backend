@@ -1,0 +1,145 @@
+### Message Service API Testing
+@baseUrl = http://localhost:5005
+@userId1 = parent-123
+@userId2 = teacher-456
+@studentId = student-789
+@classId = class-101
+
+### 1. Health Check
+GET {{baseUrl}}/health
+
+### 2. Create Direct Message Conversation (1-1 Chat)
+POST {{baseUrl}}/api/conversations
+Content-Type: application/json
+
+{
+  "type": "DirectMessage",
+  "memberIds": ["{{userId1}}", "{{userId2}}"],
+  "createdBy": "{{userId1}}"
+}
+
+### 3. Create Student Group Conversation
+POST {{baseUrl}}/api/conversations
+Content-Type: application/json
+
+{
+  "type": "StudentGroup",
+  "groupName": "Nhóm chat của học sinh Nguyễn Văn A",
+  "studentId": "{{studentId}}",
+  "classId": "{{classId}}",
+  "memberIds": ["{{userId1}}", "{{userId2}}"],
+  "createdBy": "System"
+}
+
+### 4. Create Custom Group Conversation
+POST {{baseUrl}}/api/conversations
+Content-Type: application/json
+
+{
+  "type": "CustomGroup",
+  "groupName": "Hội phụ huynh lớp 1A",
+  "memberIds": ["{{userId1}}", "{{userId2}}", "parent-789", "teacher-101"],
+  "createdBy": "{{userId1}}"
+}
+
+### 5. Get Conversations of User
+GET {{baseUrl}}/api/conversations?userId={{userId1}}&skip=0&limit=20
+
+### 6. Send Message (REST API)
+# Replace {conversationId} with actual ID from previous responses
+POST {{baseUrl}}/api/conversations/{conversationId}/messages
+Content-Type: application/json
+
+{
+  "conversationId": "{conversationId}",
+  "senderId": "{{userId1}}",
+  "senderName": "Phụ Huynh Nguyễn",
+  "content": "Xin chào cô giáo, con em hôm nay có nghỉ học được không ạ?",
+  "attachments": []
+}
+
+### 7. Send Message with Reply
+POST {{baseUrl}}/api/conversations/{conversationId}/messages
+Content-Type: application/json
+
+{
+  "conversationId": "{conversationId}",
+  "senderId": "{{userId2}}",
+  "senderName": "Giáo Viên Mai",
+  "content": "Dạ được ạ, phụ huynh nhớ viết đơn xin nghỉ nhé",
+  "replyToMessageId": "{previousMessageId}",
+  "attachments": []
+}
+
+### 8. Send Message with Attachment
+POST {{baseUrl}}/api/conversations/{conversationId}/messages
+Content-Type: application/json
+
+{
+  "conversationId": "{conversationId}",
+  "senderId": "{{userId1}}",
+  "senderName": "Phụ Huynh Nguyễn",
+  "content": "Đây là đơn xin nghỉ của con ạ",
+  "attachments": [
+    {
+      "fileName": "don-xin-nghi.pdf",
+      "fileUrl": "https://example.com/files/don-xin-nghi.pdf",
+      "fileType": "application/pdf",
+      "fileSize": 524288,
+      "thumbnailUrl": null
+    }
+  ]
+}
+
+### 9. Get Messages in Conversation
+GET {{baseUrl}}/api/conversations/{conversationId}/messages?skip=0&limit=50
+
+### 10. Search Messages
+GET {{baseUrl}}/api/conversations/{conversationId}/messages/search?query=nghỉ học&skip=0&limit=20
+
+###############################################
+# SignalR Testing (Use with JavaScript Client)
+###############################################
+
+### SignalR Hub URL
+# ws://localhost:5005/chathub
+
+### JavaScript Example:
+# const connection = new signalR.HubConnectionBuilder()
+#     .withUrl("http://localhost:5005/chathub")
+#     .build();
+#
+# await connection.start();
+# await connection.invoke("JoinConversation", "conversationId");
+# await connection.invoke("SendMessage", {
+#     conversationId: "...",
+#     senderId: "user-123",
+#     senderName: "John Doe",
+#     content: "Hello!"
+# });
+
+###############################################
+# Event Testing Scenarios
+###############################################
+
+### Scenario 1: Student Assigned to Class
+# This event should be published by StudentService
+# MessageService will automatically create student group chat
+
+### Expected Event:
+# {
+#   "EventId": "guid",
+#   "EventType": "StudentAssignedToClassEvent",
+#   "Timestamp": "2025-10-26T...",
+#   "StudentId": "student-guid",
+#   "ClassId": "class-guid",
+#   "StudentName": "Nguyễn Văn A",
+#   "ClassName": "Lớp 1A",
+#   "ParentIds": ["parent-guid-1", "parent-guid-2"],
+#   "TeacherIds": ["teacher-guid-1", "teacher-guid-2"]
+# }
+
+### Result:
+# - Auto create StudentGroup conversation
+# - Add all parents and teachers as members
+# - GroupName: "Nhóm chat của học sinh Nguyễn Văn A"

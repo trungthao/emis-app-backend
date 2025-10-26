@@ -1,0 +1,119 @@
+### MESSAGE SERVICE - EVENT-DRIVEN ARCHITECTURE TEST
+### Flow: REST API → Save to MongoDB → Publish to Kafka → Consume Event → Broadcast via SignalR
+
+@baseUrl = http://localhost:5005/api
+
+### 1. Create Direct Conversation (Parent ↔ Teacher)
+POST {{baseUrl}}/conversations
+Content-Type: application/json
+
+{
+  "type": "DirectMessage",
+  "initiatorId": "parent-001",
+  "initiatorType": "Parent",
+  "memberIds": ["teacher-001"],
+  "memberTypes": ["Teacher"]
+}
+
+### Extract conversation ID from response
+### Example: "id": "674ae9e5f2e3b5c8d4f1a2b3"
+
+### 2. Send Message via REST API (Event-Driven)
+### ✅ REST API → Save MongoDB → Publish MessageSentEvent to Kafka → SignalR Broadcast
+POST {{baseUrl}}/conversations/674ae9e5f2e3b5c8d4f1a2b3/messages
+Content-Type: application/json
+
+{
+  "senderId": "parent-001",
+  "senderType": "Parent",
+  "content": "Xin chào thầy, con em học thế nào ạ?",
+  "attachments": []
+}
+
+### 3. Send Another Message
+POST {{baseUrl}}/conversations/674ae9e5f2e3b5c8d4f1a2b3/messages
+Content-Type: application/json
+
+{
+  "senderId": "teacher-001",
+  "senderType": "Teacher",
+  "content": "Dạ em học rất tốt, chăm chỉ lắm ạ!",
+  "attachments": []
+}
+
+### 4. Send Message with Attachments
+POST {{baseUrl}}/conversations/674ae9e5f2e3b5c8d4f1a2b3/messages
+Content-Type: application/json
+
+{
+  "senderId": "teacher-001",
+  "senderType": "Teacher",
+  "content": "Đây là bài kiểm tra của em ạ",
+  "attachments": [
+    {
+      "fileName": "bai-kiem-tra.pdf",
+      "fileUrl": "https://storage.example.com/files/test-results.pdf",
+      "fileType": "application/pdf",
+      "fileSize": 2048576
+    }
+  ]
+}
+
+### 5. Get Conversation Messages
+GET {{baseUrl}}/conversations/674ae9e5f2e3b5c8d4f1a2b3/messages?page=1&pageSize=20
+
+### 6. Get User's Conversations
+GET {{baseUrl}}/conversations?userId=parent-001&userType=Parent&page=1&pageSize=20
+
+### 7. Create Student Group Conversation (Auto-created via Event)
+### Scenario: Khi StudentService assign student vào class
+### StudentService sẽ publish StudentAssignedToClassEvent
+### MessageService consume event và tự động tạo student group
+
+### Simulate event from StudentService:
+### {
+###   "studentId": "student-001",
+###   "classId": "class-10a1",
+###   "teacherIds": ["teacher-001", "teacher-002"],
+###   "parentIds": ["parent-001", "parent-002"]
+### }
+### => MessageService tự động tạo conversation StudentGroup
+
+### 8. Test SignalR Connection (Use browser console or Postman)
+### JavaScript client code:
+###
+### const connection = new signalR.HubConnectionBuilder()
+###     .withUrl("http://localhost:5005/chathub")
+###     .build();
+###
+### // Join conversation
+### connection.invoke("JoinConversation", "674ae9e5f2e3b5c8d4f1a2b3");
+###
+### // Listen for new messages
+### connection.on("ReceiveMessage", (message) => {
+###     console.log("New message:", message);
+### });
+###
+### // Start connection
+### await connection.start();
+
+### ARCHITECTURE FLOW EXPLANATION:
+### 
+### 📤 SENDING MESSAGE (Event-Driven):
+### 1. Client gửi POST request đến /api/conversations/{id}/messages
+### 2. SendMessageCommandHandler xử lý:
+###    - Validate input
+###    - Save message to MongoDB
+###    - Publish MessageSentEvent to Kafka topic "MessageSentEvent"
+### 3. Kafka consumer (MessageSentEventHandler) nhận event:
+###    - Lấy message data từ event
+###    - Broadcast qua SignalR đến tất cả clients trong conversation group
+### 4. Clients nhận message realtime qua SignalR
+###
+### ✅ BENEFITS:
+### - Decoupling: API không cần biết về SignalR
+### - Reliability: Kafka đảm bảo message không bị mất
+### - Scalability: Có thể scale API và SignalR server riêng biệt
+### - Audit: Có thể log tất cả events trong Kafka
+### - Flexibility: Có thể thêm nhiều consumers khác (push notification, analytics, etc.)
+
