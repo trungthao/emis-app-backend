@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Student.Application.Common;
 using Student.Application.DTOs;
@@ -17,6 +18,7 @@ namespace Student.API.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/[controller]")]
+[Authorize] // Require authentication for all endpoints
 public class StudentsController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -1,89 +1,140 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-
-# API Gateway
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "src\ApiGateway\ApiGateway.csproj", "{A1111111-1111-1111-1111-111111111111}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Student.Domain", "src\Services\StudentService\Student.Domain\Student.Domain.csproj", "{D962B3E2-5AB2-41DA-AA52-91B943F0DE05}"
 EndProject
-
-# Student Service
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StudentService", "StudentService", "{B1111111-1111-1111-1111-111111111111}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Student.Application", "src\Services\StudentService\Student.Application\Student.Application.csproj", "{56BF68B1-7189-46A5-910B-83E6B00C05F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Student.Domain", "src\Services\StudentService\Student.Domain\Student.Domain.csproj", "{B1111111-1111-1111-1111-111111111112}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Student.Infrastructure", "src\Services\StudentService\Student.Infrastructure\Student.Infrastructure.csproj", "{328F739C-D32C-4A41-AB24-404ED76083B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Student.Application", "src\Services\StudentService\Student.Application\Student.Application.csproj", "{B1111111-1111-1111-1111-111111111113}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Student.API", "src\Services\StudentService\Student.API\Student.API.csproj", "{88338E8A-97F5-47C9-9118-3DB9711B43F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Student.Infrastructure", "src\Services\StudentService\Student.Infrastructure\Student.Infrastructure.csproj", "{B1111111-1111-1111-1111-111111111114}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teacher.Domain", "src\Services\TeacherService\Teacher.Domain\Teacher.Domain.csproj", "{FFFDF591-C314-46EE-B2FE-E3509348DFB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Student.API", "src\Services\StudentService\Student.API\Student.API.csproj", "{B1111111-1111-1111-1111-111111111115}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teacher.Application", "src\Services\TeacherService\Teacher.Application\Teacher.Application.csproj", "{1EDA400F-2553-4144-A23C-47B17AF76EF9}"
 EndProject
-
-# Teacher Service
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TeacherService", "TeacherService", "{C1111111-1111-1111-1111-111111111111}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teacher.Infrastructure", "src\Services\TeacherService\Teacher.Infrastructure\Teacher.Infrastructure.csproj", "{27B61A77-D944-4F49-BC34-CC277D79FF70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teacher.Domain", "src\Services\TeacherService\Teacher.Domain\Teacher.Domain.csproj", "{C1111111-1111-1111-1111-111111111112}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teacher.API", "src\Services\TeacherService\Teacher.API\Teacher.API.csproj", "{CF1FC22A-ED6D-497F-9A79-5B735DEDBCDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teacher.Application", "src\Services\TeacherService\Teacher.Application\Teacher.Application.csproj", "{C1111111-1111-1111-1111-111111111113}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2DE715D4-8DA9-4AEC-BF1C-FD897DA3346E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teacher.Infrastructure", "src\Services\TeacherService\Teacher.Infrastructure\Teacher.Infrastructure.csproj", "{C1111111-1111-1111-1111-111111111114}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{83D9D4D9-4B79-4EEB-9D60-10F17937ECE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teacher.API", "src\Services\TeacherService\Teacher.API\Teacher.API.csproj", "{C1111111-1111-1111-1111-111111111115}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMIS.Authentication", "src\Shared\EMIS.Authentication\EMIS.Authentication.csproj", "{11C6521A-51B4-4F6E-A28E-D693B4A20888}"
 EndProject
-
-# Attendance Service
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AttendanceService", "AttendanceService", "{D1111111-1111-1111-1111-111111111111}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{97F725CD-AF3F-4BC4-8DC6-07526FC5508D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Attendance.Domain", "src\Services\AttendanceService\Attendance.Domain\Attendance.Domain.csproj", "{D1111111-1111-1111-1111-111111111112}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StudentService", "StudentService", "{B0000000-0000-0000-0000-000000000001}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Attendance.Application", "src\Services\AttendanceService\Attendance.Application\Attendance.Application.csproj", "{D1111111-1111-1111-1111-111111111113}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TeacherService", "TeacherService", "{C0000000-0000-0000-0000-000000000001}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Attendance.Infrastructure", "src\Services\AttendanceService\Attendance.Infrastructure\Attendance.Infrastructure.csproj", "{D1111111-1111-1111-1111-111111111114}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AuthService", "AuthService", "{BB88E41F-DD6A-4943-B9FB-2A9CABDAE551}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Attendance.API", "src\Services\AttendanceService\Attendance.API\Attendance.API.csproj", "{D1111111-1111-1111-1111-111111111115}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.API", "src\Services\AuthService\Auth.API\Auth.API.csproj", "{901DC36B-C04A-4307-9DB9-6CF54460AB99}"
 EndProject
-
-# Fee Management Service
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FeeManagementService", "FeeManagementService", "{E1111111-1111-1111-1111-111111111111}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.Application", "src\Services\AuthService\Auth.Application\Auth.Application.csproj", "{E371F8D3-8839-4402-89CA-F4F072C2559F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeeManagement.Domain", "src\Services\FeeManagementService\FeeManagement.Domain\FeeManagement.Domain.csproj", "{E1111111-1111-1111-1111-111111111112}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.Domain", "src\Services\AuthService\Auth.Domain\Auth.Domain.csproj", "{DA40490C-97A4-4955-9610-E655A739F722}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeeManagement.Application", "src\Services\FeeManagementService\FeeManagement.Application\FeeManagement.Application.csproj", "{E1111111-1111-1111-1111-111111111113}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth.Infrastructure", "src\Services\AuthService\Auth.Infrastructure\Auth.Infrastructure.csproj", "{86AEC5D2-B0C8-4C8F-A810-C2A94899DD95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeeManagement.Infrastructure", "src\Services\FeeManagementService\FeeManagement.Infrastructure\FeeManagement.Infrastructure.csproj", "{E1111111-1111-1111-1111-111111111114}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMIS.EventBus.Kafka", "src\Shared\EMIS.EventBus.Kafka\EMIS.EventBus.Kafka.csproj", "{BC4FB4AA-B308-4FBA-AF13-9CB21CC59525}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeeManagement.API", "src\Services\FeeManagementService\FeeManagement.API\FeeManagement.API.csproj", "{E1111111-1111-1111-1111-111111111115}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMIS.Contracts", "src\Shared\EMIS.Contracts\EMIS.Contracts.csproj", "{FCAC7E1C-0BDA-45A0-8BF4-90E9B943054D}"
 EndProject
-
-# Messaging Service
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MessagingService", "MessagingService", "{F1111111-1111-1111-1111-111111111111}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging.Domain", "src\Services\MessagingService\Messaging.Domain\Messaging.Domain.csproj", "{F1111111-1111-1111-1111-111111111112}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging.Application", "src\Services\MessagingService\Messaging.Application\Messaging.Application.csproj", "{F1111111-1111-1111-1111-111111111113}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging.Infrastructure", "src\Services\MessagingService\Messaging.Infrastructure\Messaging.Infrastructure.csproj", "{F1111111-1111-1111-1111-111111111114}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging.API", "src\Services\MessagingService\Messaging.API\Messaging.API.csproj", "{F1111111-1111-1111-1111-111111111115}"
-EndProject
-
-# Shared Libraries
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{91111111-1111-1111-1111-111111111111}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMIS.Common", "src\Shared\EMIS.Common\EMIS.Common.csproj", "{91111111-1111-1111-1111-111111111112}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMIS.EventBus", "src\Shared\EMIS.EventBus\EMIS.EventBus.csproj", "{91111111-1111-1111-1111-111111111113}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMIS.Authentication", "src\Shared\EMIS.Authentication\EMIS.Authentication.csproj", "{91111111-1111-1111-1111-111111111114}"
-EndProject
-
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D962B3E2-5AB2-41DA-AA52-91B943F0DE05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D962B3E2-5AB2-41DA-AA52-91B943F0DE05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D962B3E2-5AB2-41DA-AA52-91B943F0DE05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D962B3E2-5AB2-41DA-AA52-91B943F0DE05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56BF68B1-7189-46A5-910B-83E6B00C05F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56BF68B1-7189-46A5-910B-83E6B00C05F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56BF68B1-7189-46A5-910B-83E6B00C05F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56BF68B1-7189-46A5-910B-83E6B00C05F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{328F739C-D32C-4A41-AB24-404ED76083B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{328F739C-D32C-4A41-AB24-404ED76083B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{328F739C-D32C-4A41-AB24-404ED76083B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{328F739C-D32C-4A41-AB24-404ED76083B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88338E8A-97F5-47C9-9118-3DB9711B43F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88338E8A-97F5-47C9-9118-3DB9711B43F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88338E8A-97F5-47C9-9118-3DB9711B43F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88338E8A-97F5-47C9-9118-3DB9711B43F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFFDF591-C314-46EE-B2FE-E3509348DFB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFFDF591-C314-46EE-B2FE-E3509348DFB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFFDF591-C314-46EE-B2FE-E3509348DFB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFFDF591-C314-46EE-B2FE-E3509348DFB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EDA400F-2553-4144-A23C-47B17AF76EF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EDA400F-2553-4144-A23C-47B17AF76EF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EDA400F-2553-4144-A23C-47B17AF76EF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EDA400F-2553-4144-A23C-47B17AF76EF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27B61A77-D944-4F49-BC34-CC277D79FF70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27B61A77-D944-4F49-BC34-CC277D79FF70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27B61A77-D944-4F49-BC34-CC277D79FF70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27B61A77-D944-4F49-BC34-CC277D79FF70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF1FC22A-ED6D-497F-9A79-5B735DEDBCDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF1FC22A-ED6D-497F-9A79-5B735DEDBCDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF1FC22A-ED6D-497F-9A79-5B735DEDBCDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF1FC22A-ED6D-497F-9A79-5B735DEDBCDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11C6521A-51B4-4F6E-A28E-D693B4A20888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11C6521A-51B4-4F6E-A28E-D693B4A20888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11C6521A-51B4-4F6E-A28E-D693B4A20888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11C6521A-51B4-4F6E-A28E-D693B4A20888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{901DC36B-C04A-4307-9DB9-6CF54460AB99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{901DC36B-C04A-4307-9DB9-6CF54460AB99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{901DC36B-C04A-4307-9DB9-6CF54460AB99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{901DC36B-C04A-4307-9DB9-6CF54460AB99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E371F8D3-8839-4402-89CA-F4F072C2559F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E371F8D3-8839-4402-89CA-F4F072C2559F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E371F8D3-8839-4402-89CA-F4F072C2559F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E371F8D3-8839-4402-89CA-F4F072C2559F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA40490C-97A4-4955-9610-E655A739F722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA40490C-97A4-4955-9610-E655A739F722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA40490C-97A4-4955-9610-E655A739F722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA40490C-97A4-4955-9610-E655A739F722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86AEC5D2-B0C8-4C8F-A810-C2A94899DD95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86AEC5D2-B0C8-4C8F-A810-C2A94899DD95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86AEC5D2-B0C8-4C8F-A810-C2A94899DD95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86AEC5D2-B0C8-4C8F-A810-C2A94899DD95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC4FB4AA-B308-4FBA-AF13-9CB21CC59525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC4FB4AA-B308-4FBA-AF13-9CB21CC59525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC4FB4AA-B308-4FBA-AF13-9CB21CC59525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC4FB4AA-B308-4FBA-AF13-9CB21CC59525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCAC7E1C-0BDA-45A0-8BF4-90E9B943054D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCAC7E1C-0BDA-45A0-8BF4-90E9B943054D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCAC7E1C-0BDA-45A0-8BF4-90E9B943054D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCAC7E1C-0BDA-45A0-8BF4-90E9B943054D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{83D9D4D9-4B79-4EEB-9D60-10F17937ECE8} = {2DE715D4-8DA9-4AEC-BF1C-FD897DA3346E}
+		{11C6521A-51B4-4F6E-A28E-D693B4A20888} = {83D9D4D9-4B79-4EEB-9D60-10F17937ECE8}
+		{BC4FB4AA-B308-4FBA-AF13-9CB21CC59525} = {83D9D4D9-4B79-4EEB-9D60-10F17937ECE8}
+		{FCAC7E1C-0BDA-45A0-8BF4-90E9B943054D} = {83D9D4D9-4B79-4EEB-9D60-10F17937ECE8}
+		{97F725CD-AF3F-4BC4-8DC6-07526FC5508D} = {2DE715D4-8DA9-4AEC-BF1C-FD897DA3346E}
+		{B0000000-0000-0000-0000-000000000001} = {97F725CD-AF3F-4BC4-8DC6-07526FC5508D}
+		{C0000000-0000-0000-0000-000000000001} = {97F725CD-AF3F-4BC4-8DC6-07526FC5508D}
+		{BB88E41F-DD6A-4943-B9FB-2A9CABDAE551} = {97F725CD-AF3F-4BC4-8DC6-07526FC5508D}
+		{D962B3E2-5AB2-41DA-AA52-91B943F0DE05} = {B0000000-0000-0000-0000-000000000001}
+		{56BF68B1-7189-46A5-910B-83E6B00C05F5} = {B0000000-0000-0000-0000-000000000001}
+		{328F739C-D32C-4A41-AB24-404ED76083B5} = {B0000000-0000-0000-0000-000000000001}
+		{88338E8A-97F5-47C9-9118-3DB9711B43F3} = {B0000000-0000-0000-0000-000000000001}
+		{FFFDF591-C314-46EE-B2FE-E3509348DFB9} = {C0000000-0000-0000-0000-000000000001}
+		{1EDA400F-2553-4144-A23C-47B17AF76EF9} = {C0000000-0000-0000-0000-000000000001}
+		{27B61A77-D944-4F49-BC34-CC277D79FF70} = {C0000000-0000-0000-0000-000000000001}
+		{CF1FC22A-ED6D-497F-9A79-5B735DEDBCDB} = {C0000000-0000-0000-0000-000000000001}
+		{901DC36B-C04A-4307-9DB9-6CF54460AB99} = {BB88E41F-DD6A-4943-B9FB-2A9CABDAE551}
+		{E371F8D3-8839-4402-89CA-F4F072C2559F} = {BB88E41F-DD6A-4943-B9FB-2A9CABDAE551}
+		{DA40490C-97A4-4955-9610-E655A739F722} = {BB88E41F-DD6A-4943-B9FB-2A9CABDAE551}
+		{86AEC5D2-B0C8-4C8F-A810-C2A94899DD95} = {BB88E41F-DD6A-4943-B9FB-2A9CABDAE551}
 	EndGlobalSection
 EndGlobal

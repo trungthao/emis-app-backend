@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Student.Application\Student.Application.csproj" />
     <ProjectReference Include="..\Student.Infrastructure\Student.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Shared\EMIS.Authentication\EMIS.Authentication.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,117 @@
+### Teacher Detail API - Get teacher with class assignments information
+### This API returns complete teacher information including all classes they are assigned to
+
+@teacherServiceUrl = http://localhost:5000
+
+### 1. Create Teacher with Assignments (for testing)
+# @name createTeacherWithClasses
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Nguyen Van",
+  "lastName": "Detail",
+  "email": "nguyenvandetail@school.edu.vn",
+  "phone": "0909111222",
+  "dateOfBirth": "1985-06-15",
+  "address": "123 Teacher Street, District 1, Ho Chi Minh City",
+  "assignments": [
+    {
+      "classId": "11111111-1111-1111-1111-111111111111",
+      "role": "Homeroom Teacher"
+    },
+    {
+      "classId": "22222222-2222-2222-2222-222222222222",
+      "role": "Subject Teacher"
+    }
+  ]
+}
+
+###
+
+### 2. Get Teacher Detail by ID (with class information)
+# Replace {teacherId} with actual ID from create response
+# @name getTeacherDetail
+GET {{teacherServiceUrl}}/api/teachers/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Accept: application/json
+
+###
+
+### 3. Test with mock class IDs
+# Create teacher with known class IDs to see mock class information
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Tran Thi",
+  "lastName": "MockClass",
+  "email": "tranthimockclass@school.edu.vn",
+  "phone": "0908333444",
+  "dateOfBirth": "1990-03-20",
+  "assignments": [
+    {
+      "classId": "11111111-1111-1111-1111-111111111111",
+      "role": "Main Teacher"
+    },
+    {
+      "classId": "22222222-2222-2222-2222-222222222222",
+      "role": "Assistant Teacher"
+    },
+    {
+      "classId": "33333333-3333-3333-3333-333333333333",
+      "role": "Subject Teacher"
+    }
+  ]
+}
+
+###
+
+### Expected Response Structure:
+### {
+###   "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+###   "firstName": "Nguyen Van",
+###   "lastName": "Detail",
+###   "fullName": "Nguyen Van Detail",
+###   "email": "nguyenvandetail@school.edu.vn",
+###   "phone": "0909111222",
+###   "dateOfBirth": "1985-06-15T00:00:00",
+###   "address": "123 Teacher Street, District 1, Ho Chi Minh City",
+###   "status": "Active",
+###   "createdAt": "2025-10-26T10:00:00",
+###   "classAssignments": [
+###     {
+###       "assignmentId": "abc123...",
+###       "teacherId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+###       "classId": "11111111-1111-1111-1111-111111111111",
+###       "role": "Homeroom Teacher",
+###       "assignedAt": "2025-10-26T10:00:00",
+###       "className": "Lớp 10A1",
+###       "grade": "Khối 10",
+###       "academicYear": "2024-2025",
+###       "totalStudents": 45
+###     },
+###     {
+###       "assignmentId": "def456...",
+###       "teacherId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+###       "classId": "22222222-2222-2222-2222-222222222222",
+###       "role": "Subject Teacher",
+###       "assignedAt": "2025-10-26T10:00:00",
+###       "className": "Lớp 10A2",
+###       "grade": "Khối 10",
+###       "academicYear": "2024-2025",
+###       "totalStudents": 42
+###     }
+###   ],
+###   "totalClassesAssigned": 2
+### }
+
+### Mock Class Data Available:
+### - ClassId: 11111111-1111-1111-1111-111111111111 -> Lớp 10A1 (Khối 10, 45 students)
+### - ClassId: 22222222-2222-2222-2222-222222222222 -> Lớp 10A2 (Khối 10, 42 students)
+### - ClassId: 33333333-3333-3333-3333-333333333333 -> Lớp 11B1 (Khối 11, 40 students)
+### - Other ClassIds -> Default mock data
+
+### Note:
+### Trong production, thông tin lớp học (className, grade, etc.) 
+### sẽ được lấy từ ClassService/StudentService qua HTTP Client hoặc gRPC.
+### Hiện tại sử dụng mock data để demo.

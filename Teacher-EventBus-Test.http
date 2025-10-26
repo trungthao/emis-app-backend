@@ -1,0 +1,291 @@
+### Test EventBus Integration - Create Teacher and Verify Event Flow
+### This file tests the complete event-driven flow:
+### 1. Create teacher via TeacherService
+### 2. TeacherService publishes TeacherCreatedEvent to Kafka
+### 3. AuthService consumes event and creates user account
+### 4. Verify login with generated credentials
+
+@teacherServiceUrl = http://localhost:5000
+@authServiceUrl = http://localhost:5002
+
+### 1. Health Check - Teacher Service
+GET {{teacherServiceUrl}}/api/health
+Accept: application/json
+
+###
+
+### 2. Health Check - Auth Service
+GET {{authServiceUrl}}/api/health
+Accept: application/json
+
+###
+
+### 3. Create Teacher (Test Event Publishing)
+# @name createTeacher
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Nguyen Van",
+  "lastName": "EventBus",
+  "email": "nguyenvaneventbus@school.edu.vn",
+  "phone": "0909999999",
+  "dateOfBirth": "1990-05-15",
+  "address": "123 Event Street, District 1, Ho Chi Minh City"
+}
+
+###
+
+### 4. Create Teacher with Phone Only (Test fallback to phone as username)
+# @name createTeacherPhoneOnly
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Tran Thi",
+  "lastName": "PhoneOnly",
+  "phone": "0908888888",
+  "dateOfBirth": "1992-08-20",
+  "address": "456 Phone Lane, District 3, Ho Chi Minh City"
+}
+
+###
+
+### 5. Create Teacher with Assignments
+# @name createTeacherWithAssignments
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Le Van",
+  "lastName": "Math",
+  "email": "levanmath@school.edu.vn",
+  "phone": "0907777777",
+  "dateOfBirth": "1988-03-10",
+  "address": "789 Assignment Ave, District 5, Ho Chi Minh City",
+  "assignments": [
+    {
+      "classId": "11111111-1111-1111-1111-111111111111",
+      "role": "Main Teacher"
+    },
+    {
+      "classId": "22222222-2222-2222-2222-222222222222",
+      "role": "Assistant Teacher"
+    }
+  ]
+}
+
+###
+
+### 6. Wait 5 seconds for event processing
+# After creating teacher, wait a few seconds for:
+# - Event to be published to Kafka
+# - AuthService to consume event
+# - Account to be created in AuthService database
+
+###
+
+### 7. Login with Email (after event processed)
+# Use the email from step 3
+# Password format: Teacher@[random8chars]
+# Check AuthService logs or Kafka UI for the generated password
+POST {{authServiceUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "nguyenvaneventbus@school.edu.vn",
+  "password": "Teacher@abc12345"
+}
+
+###
+
+### 8. Login with Phone (after event processed)
+# Use the phone from step 4
+# Password format: Teacher@[random8chars]
+POST {{authServiceUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "0908888888",
+  "password": "Teacher@xyz67890"
+}
+
+###
+
+### 9. Get All Teachers
+GET {{teacherServiceUrl}}/api/teachers
+Accept: application/json
+
+###
+
+### 10. Get Teacher by ID
+# Replace with actual teacher ID from create response
+GET {{teacherServiceUrl}}/api/teachers/3fa85f64-5717-4562-b3fc-2c963f66afa6
+Accept: application/json
+
+###
+
+### ============================================
+### LOAD TESTING - Create Multiple Teachers
+### ============================================
+
+### Create Teacher 1
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Teacher",
+  "lastName": "01",
+  "email": "teacher01@school.edu.vn",
+  "phone": "0901000001",
+  "dateOfBirth": "1990-01-01"
+}
+
+###
+
+### Create Teacher 2
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Teacher",
+  "lastName": "02",
+  "email": "teacher02@school.edu.vn",
+  "phone": "0901000002",
+  "dateOfBirth": "1990-01-02"
+}
+
+###
+
+### Create Teacher 3
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Teacher",
+  "lastName": "03",
+  "email": "teacher03@school.edu.vn",
+  "phone": "0901000003",
+  "dateOfBirth": "1990-01-03"
+}
+
+###
+
+### Create Teacher 4
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Teacher",
+  "lastName": "04",
+  "email": "teacher04@school.edu.vn",
+  "phone": "0901000004",
+  "dateOfBirth": "1990-01-04"
+}
+
+###
+
+### Create Teacher 5
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Teacher",
+  "lastName": "05",
+  "email": "teacher05@school.edu.vn",
+  "phone": "0901000005",
+  "dateOfBirth": "1990-01-05"
+}
+
+###
+
+### ============================================
+### ERROR SCENARIOS
+### ============================================
+
+### Test: Duplicate Email (should fail at TeacherService level)
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Duplicate",
+  "lastName": "Email",
+  "email": "nguyenvaneventbus@school.edu.vn",
+  "phone": "0906666666",
+  "dateOfBirth": "1995-06-15"
+}
+
+###
+
+### Test: Invalid Email Format (should fail validation)
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "firstName": "Invalid",
+  "lastName": "Email",
+  "email": "invalid-email-format",
+  "phone": "0905555555",
+  "dateOfBirth": "1993-07-20"
+}
+
+###
+
+### Test: Missing Required Fields (should fail validation)
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "email": "missing@fields.com"
+}
+
+###
+
+### ============================================
+### MONITORING & VERIFICATION
+### ============================================
+
+### Kafka UI
+# Open in browser: http://localhost:8080
+# Navigate to: Topics > emis.auth.teacher.created > Messages
+# Verify events are published with correct structure
+
+### Check Consumer Group Lag
+# Run in terminal:
+# docker exec emis-kafka-1 kafka-consumer-groups \
+#   --bootstrap-server kafka-1:29092 \
+#   --describe \
+#   --group emis-auth-service
+
+### View Database Records
+# Connect to AuthService DB:
+# docker exec -it emis-auth-db mysql -uroot -prootpassword EMIS_AuthDB
+# 
+# Query users:
+# SELECT Id, Username, Email, FullName, CreatedAt FROM Users WHERE Email LIKE '%@school.edu.vn' ORDER BY CreatedAt DESC LIMIT 10;
+#
+# Query user roles:
+# SELECT u.Username, r.Name as RoleName 
+# FROM Users u 
+# JOIN UserRoles ur ON u.Id = ur.UserId 
+# JOIN Roles r ON ur.RoleId = r.Id 
+# WHERE u.Email LIKE '%@school.edu.vn';
+
+### Expected Flow Logs:
+###
+### TeacherService Console:
+### info: Teacher.Application.UseCases.Teachers.Commands.CreateTeacher.CreateTeacherCommandHandler[0]
+###       Published TeacherCreatedEvent for Teacher {TeacherId} with email {Email}
+###
+### info: EMIS.EventBus.Kafka.Kafka.KafkaEventBus[0]
+###       Publishing event TeacherCreatedEvent (ID: {EventId}) to topic emis.auth.teacher.created
+###
+### AuthService Console:
+### info: EMIS.EventBus.Kafka.Kafka.KafkaConsumerService[0]
+###       Received message from topic emis.auth.teacher.created, partition {Partition}, offset {Offset}
+###
+### info: Auth.Application.EventHandlers.TeacherCreatedEventHandler[0]
+###       Handling TeacherCreatedEvent for Teacher {TeacherId} with email {Email}
+###
+### info: Auth.Application.EventHandlers.TeacherCreatedEventHandler[0]
+###       Successfully created user account for Teacher {TeacherId}. Username: {Username}

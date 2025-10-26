@@ -1,0 +1,37 @@
+{
+  // C# Extension Settings
+  "omnisharp.enableRoslynAnalyzers": true,
+  "omnisharp.enableEditorConfigSupport": true,
+  "omnisharp.organizeImportsOnFormat": true,
+  // Debugging
+  "debug.onTaskErrors": "showErrors",
+  "debug.internalConsoleOptions": "openOnSessionStart",
+  // File exclusions for better performance
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true,
+    "**/.vs": true
+  },
+  // Auto save
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  // Terminal
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  // C# formatting
+  "editor.formatOnSave": true,
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  },
+  // HTTP files
+  "[http]": {
+    "editor.quickSuggestions": {
+      "other": true,
+      "comments": false,
+      "strings": true
+    }
+  }
+}

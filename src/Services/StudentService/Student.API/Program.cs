@@ -6,6 +6,7 @@ using Student.Application.UseCases.Students.Commands.CreateStudent;
 using Student.Domain.Repositories;
 using Student.Infrastructure.Persistence;
 using Student.Infrastructure.Repositories;
+using EMIS.Authentication.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +62,10 @@ builder.Services.AddCors(options =>
 // Add HealthChecks
 builder.Services.AddHealthChecks();
 
+// Add Authentication & Authorization
+builder.Services.AddEmisAuthentication(builder.Configuration);
+builder.Services.AddEmisAuthorization();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
@@ -75,6 +80,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

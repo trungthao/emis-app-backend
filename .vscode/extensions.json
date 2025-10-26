@@ -1,0 +1,22 @@
+{
+  "recommendations": [
+    // C# Development
+    "ms-dotnettools.csharp",
+    "ms-dotnettools.csdevkit",
+    // REST Client (for testing HTTP endpoints)
+    "humao.rest-client",
+    // Docker
+    "ms-azuretools.vscode-docker",
+    // Git
+    "eamodio.gitlens",
+    // YAML (for docker-compose)
+    "redhat.vscode-yaml",
+    // Markdown
+    "yzhang.markdown-all-in-one",
+    // Code formatting
+    "editorconfig.editorconfig",
+    // Database
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-mysql"
+  ]
+}

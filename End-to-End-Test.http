@@ -1,0 +1,108 @@
+### End-to-End EventBus Test
+### Workflow: Create Teacher → Event Published → AuthService consumes → Account created
+
+@teacherServiceUrl = http://localhost:5001
+@authServiceUrl = http://localhost:5002
+
+### Step 1: Create a new Teacher (TeacherService publishes event)
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "fullName": "Nguyễn Văn An",
+  "email": "nguyenvanan@school.edu.vn",
+  "phoneNumber": "0901234567",
+  "dateOfBirth": "1985-05-15",
+  "gender": "Male",
+  "address": "123 Đường ABC, Quận 1, TP.HCM",
+  "hireDate": "2020-09-01",
+  "department": "Toán",
+  "position": "Giáo viên",
+  "qualifications": "Thạc sĩ Toán học",
+  "yearsOfExperience": 8,
+  "schoolId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "status": "Active"
+}
+
+### Step 2: Wait 2-3 seconds for event processing, then check Kafka messages
+### Go to Kafka UI: http://localhost:8080
+### Or use CLI:
+# docker exec emis-kafka-1 kafka-console-consumer \
+#   --bootstrap-server kafka-1:29092 \
+#   --topic emis.teacher.created \
+#   --from-beginning \
+#   --max-messages 1
+
+### Step 3: Login with auto-created account (AuthService)
+### Default username: email from teacher
+### Default password: Teacher@123
+POST {{authServiceUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "nguyenvanan@school.edu.vn",
+  "password": "Teacher@123"
+}
+
+### Step 4: Verify - Get all teachers
+GET {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+### Step 5: Test with another teacher
+POST {{teacherServiceUrl}}/api/teachers
+Content-Type: application/json
+
+{
+  "fullName": "Trần Thị Bình",
+  "email": "tranthib@school.edu.vn",
+  "phoneNumber": "0907654321",
+  "dateOfBirth": "1988-08-20",
+  "gender": "Female",
+  "address": "456 Đường XYZ, Quận 3, TP.HCM",
+  "hireDate": "2019-09-01",
+  "department": "Văn",
+  "position": "Giáo viên",
+  "qualifications": "Cử nhân Ngữ văn",
+  "yearsOfExperience": 6,
+  "schoolId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "status": "Active"
+}
+
+### Step 6: Login with second teacher
+POST {{authServiceUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "tranthib@school.edu.vn",
+  "password": "Teacher@123"
+}
+
+### ===== MONITORING =====
+
+### Check Kafka Topics
+# docker exec emis-kafka-1 kafka-topics --list --bootstrap-server kafka-1:29092
+
+### Count messages in topic
+# docker exec emis-kafka-1 kafka-run-class kafka.tools.GetOffsetShell \
+#   --bootstrap-server kafka-1:29092 \
+#   --topic emis.teacher.created \
+#   --time -1 | awk -F: '{sum += $3} END {print "Total messages: " sum}'
+
+### Read messages from topic
+# docker exec emis-kafka-1 kafka-console-consumer \
+#   --bootstrap-server kafka-1:29092 \
+#   --topic emis.teacher.created \
+#   --from-beginning \
+#   --property print.key=true \
+#   --property print.timestamp=true
+
+### Check Consumer Groups
+# docker exec emis-kafka-1 kafka-consumer-groups \
+#   --bootstrap-server kafka-1:29092 \
+#   --list
+
+### Check Consumer Group Lag
+# docker exec emis-kafka-1 kafka-consumer-groups \
+#   --bootstrap-server kafka-1:29092 \
+#   --group auth-service-group \
+#   --describe

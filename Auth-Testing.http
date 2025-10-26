@@ -1,0 +1,126 @@
+### ================================
+### EMIS Authentication Testing
+### ================================
+### 
+### CENTRALIZED AUTH: All login requests go to AuthService (port 5002)
+### The JWT token can then be used across ALL services
+###
+### ================================
+
+@authApiUrl = http://localhost:5002/api/auth
+@studentApiUrl = http://localhost:5001/api
+@teacherApiUrl = http://localhost:5000/api
+
+### ================================
+### 1. AUTHENTICATION (Login)
+### ================================
+
+### Login as Admin
+# @name loginAdmin
+POST {{authApiUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Extract admin token
+@adminToken = {{loginAdmin.response.body.accessToken}}
+
+### Login as Teacher
+# @name loginTeacher
+POST {{authApiUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "teacher",
+  "password": "teacher123"
+}
+
+### Extract teacher token
+@teacherToken = {{loginTeacher.response.body.accessToken}}
+
+### Login as Parent
+# @name loginParent
+POST {{authApiUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "parent",
+  "password": "parent123"
+}
+
+### Extract parent token
+@parentToken = {{loginParent.response.body.accessToken}}
+
+### Get Current User Info (using token)
+GET {{authApiUrl}}/me
+Authorization: Bearer {{teacherToken}}
+
+### ================================
+### 2. USE TOKEN ACROSS SERVICES
+### ================================
+
+### ================================
+### 2. USE TOKEN ACROSS SERVICES
+### ================================
+
+### Student Service - Create Student (with Admin token)
+POST {{studentApiUrl}}/students
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "firstName": "Nguyen",
+  "lastName": "Van A",
+  "dateOfBirth": "2018-05-15",
+  "gender": "Male"
+}
+
+### Student Service - Get Students (with Teacher token)
+GET {{studentApiUrl}}/students
+Authorization: Bearer {{teacherToken}}
+
+### Student Service - Access without token (Should return 401)
+GET {{studentApiUrl}}/students
+
+### Teacher Service - Create Teacher (with Admin token from centralized auth)
+POST {{teacherApiUrl}}/teachers
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "firstName": "Tran",
+  "lastName": "Thi B",
+  "phone": "0901234567",
+  "email": "tranthib@school.edu.vn",
+  "assignments": [
+    {
+      "classId": "11111111-1111-1111-1111-111111111111",
+      "role": "Math Teacher"
+    }
+  ]
+}
+
+### Teacher Service - Get Teachers (with Teacher token)
+GET {{teacherApiUrl}}/teachers
+Authorization: Bearer {{teacherToken}}
+
+### Teacher Service - Access without token (Should return 401)
+GET {{teacherApiUrl}}/teachers
+
+### Teacher Service - Access without token (Should return 401)
+GET {{teacherApiUrl}}/teachers
+
+### ================================
+### 3. DEMO USERS
+### ================================
+### All users login via: POST http://localhost:5002/api/auth/login
+###
+### Username: admin     | Password: admin123   | Role: Admin
+### Username: teacher   | Password: teacher123 | Role: Teacher  
+### Username: parent    | Password: parent123  | Role: Parent
+###
+### Token can be used across ALL services (Student API, Teacher API, etc.)
+### ================================
