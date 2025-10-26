@@ -21,10 +21,10 @@ public class SendMessageRequestedEvent : BaseEvent
     public string SenderId { get; set; } = string.Empty;
     public UserType SenderType { get; set; }
     public string Content { get; set; } = string.Empty;
-    
+
     public List<MessageAttachmentData> Attachments { get; set; } = new();
     public string? ReplyToMessageId { get; set; }
-    
+
     public DateTime RequestedAt { get; set; } = DateTime.UtcNow;
 
     /// <summary>

@@ -1,7 +1,7 @@
 using EMIS.Contracts.Events;
 using EMIS.EventBus.Abstractions;
-using Microsoft.AspNetCore.SignalR;
 using Message.API.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Message.API.EventHandlers;
 
@@ -47,7 +47,7 @@ public class MessageSentEventHandler : IEventHandler<MessageSentEvent>
                 "Failed to broadcast message {MessageId} to conversation {ConversationId}",
                 @event.MessageId,
                 @event.ConversationId);
-            
+
             // Không throw - để Kafka có thể retry
             throw;
         }

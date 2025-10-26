@@ -1,7 +1,7 @@
-using MongoDB.Driver;
 using Message.Domain.Entities;
 using Message.Infrastructure.Configuration;
 using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 
 namespace Message.Infrastructure.Persistence;
 
@@ -31,7 +31,7 @@ public class MessageDbContext
     {
         // Conversations indexes
         var conversationsIndexes = Conversations.Indexes;
-        
+
         // Index cho Members.UserId để query conversations của user
         conversationsIndexes.CreateOne(
             new CreateIndexModel<Conversation>(
@@ -54,7 +54,7 @@ public class MessageDbContext
 
         // Messages indexes
         var messagesIndexes = Messages.Indexes;
-        
+
         // Index cho ConversationId
         messagesIndexes.CreateOne(
             new CreateIndexModel<ChatMessage>(

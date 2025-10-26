@@ -1,14 +1,14 @@
-using Message.API.Hubs;
+using EMIS.Contracts.Events;
+using EMIS.EventBus.Kafka.Extensions;
+using FluentValidation;
 using Message.API.EventHandlers;
+using Message.API.Hubs;
 using Message.Application.Commands;
 using Message.Application.EventHandlers;
 using Message.Domain.Repositories;
 using Message.Infrastructure.Configuration;
 using Message.Infrastructure.Persistence;
 using Message.Infrastructure.Repositories;
-using FluentValidation;
-using EMIS.EventBus.Kafka.Extensions;
-using EMIS.Contracts.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +24,8 @@ builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 // Add MediatR
-builder.Services.AddMediatR(cfg => {
+builder.Services.AddMediatR(cfg =>
+{
     cfg.RegisterServicesFromAssembly(typeof(CreateConversationCommand).Assembly);
 });
 
@@ -71,8 +72,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { 
-        Title = "Message API", 
+    c.SwaggerDoc("v1", new()
+    {
+        Title = "Message API",
         Version = "v1",
         Description = "API for messaging and real-time chat (Event-Driven Architecture)"
     });

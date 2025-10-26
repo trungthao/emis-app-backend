@@ -1,9 +1,9 @@
+using EMIS.Contracts.Events;
+using EMIS.EventBus.Abstractions;
 using MediatR;
 using Message.Application.DTOs;
-using Message.Domain.Repositories;
 using Message.Domain.Enums;
-using EMIS.EventBus.Abstractions;
-using EMIS.Contracts.Events;
+using Message.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 
 namespace Message.Application.Commands;
@@ -46,10 +46,10 @@ public class SendMessageCommandHandler : IRequestHandler<SendMessageCommand, Mes
 
         // 🔥 WRITE-BEHIND PATTERN: Publish event to Kafka (KHÔNG save to MongoDB ngay)
         // Consumer sẽ batch write để tăng throughput
-        
+
         var temporaryMessageId = Guid.NewGuid().ToString(); // Temporary ID
         var correlationId = Guid.NewGuid().ToString(); // Tracking ID
-        
+
         var sendMessageRequestedEvent = new SendMessageRequestedEvent
         {
             TemporaryMessageId = temporaryMessageId,
@@ -73,7 +73,7 @@ public class SendMessageCommandHandler : IRequestHandler<SendMessageCommand, Mes
         {
             // Publish to Kafka (fast ~1-2ms)
             await _eventBus.PublishAsync(sendMessageRequestedEvent, cancellationToken);
-            
+
             _logger.LogInformation(
                 "📤 Published SendMessageRequestedEvent: TempId={TempId}, ConversationId={ConversationId}, CorrelationId={CorrelationId}",
                 temporaryMessageId,

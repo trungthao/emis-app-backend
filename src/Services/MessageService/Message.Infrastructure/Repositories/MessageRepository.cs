@@ -1,7 +1,7 @@
-using MongoDB.Driver;
 using Message.Domain.Entities;
 using Message.Domain.Repositories;
 using Message.Infrastructure.Persistence;
+using MongoDB.Driver;
 
 namespace Message.Infrastructure.Repositories;
 
@@ -41,8 +41,8 @@ public class MessageRepository : IMessageRepository
         CancellationToken cancellationToken = default)
     {
         return await _context.Messages
-            .Find(m => m.ConversationId == conversationId && 
-                      m.SentAt > after && 
+            .Find(m => m.ConversationId == conversationId &&
+                      m.SentAt > after &&
                       !m.IsDeleted)
             .SortBy(m => m.SentAt)
             .ToListAsync(cancellationToken);
@@ -95,7 +95,7 @@ public class MessageRepository : IMessageRepository
 
         var result = await _context.Messages
             .UpdateOneAsync(m => m.Id == id, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 
@@ -120,7 +120,7 @@ public class MessageRepository : IMessageRepository
 
         var result = await _context.Messages
             .UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 
@@ -146,7 +146,7 @@ public class MessageRepository : IMessageRepository
 
         var result = await _context.Messages
             .UpdateManyAsync(filter, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 

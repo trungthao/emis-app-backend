@@ -103,7 +103,7 @@ class ChatClient {
             console.log("✅ Message sent");
         } catch (error) {
             console.error("❌ Failed to send message:", error);
-            
+
             // Fallback: Gửi qua REST API nếu SignalR fail
             await this.sendMessageViaRestAPI(conversationId, content, attachments);
         }

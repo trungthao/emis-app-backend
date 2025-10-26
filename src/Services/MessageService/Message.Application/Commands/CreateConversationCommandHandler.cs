@@ -1,8 +1,8 @@
 using MediatR;
 using Message.Application.DTOs;
 using Message.Domain.Entities;
-using Message.Domain.Repositories;
 using Message.Domain.Enums;
+using Message.Domain.Repositories;
 
 namespace Message.Application.Commands;
 
@@ -21,10 +21,10 @@ public class CreateConversationCommandHandler : IRequestHandler<CreateConversati
         if (request.Type == ConversationType.DirectMessage && request.MemberIds.Count == 2)
         {
             var existing = await _conversationRepository.FindDirectConversationAsync(
-                request.MemberIds[0], 
-                request.MemberIds[1], 
+                request.MemberIds[0],
+                request.MemberIds[1],
                 cancellationToken);
-            
+
             if (existing != null)
             {
                 return MapToDto(existing, request.CreatedBy);
@@ -35,9 +35,9 @@ public class CreateConversationCommandHandler : IRequestHandler<CreateConversati
         if (request.Type == ConversationType.StudentGroup && request.StudentId.HasValue)
         {
             var existing = await _conversationRepository.FindStudentGroupAsync(
-                request.StudentId.Value, 
+                request.StudentId.Value,
                 cancellationToken);
-            
+
             if (existing != null)
             {
                 return MapToDto(existing, request.CreatedBy);
@@ -56,22 +56,22 @@ public class CreateConversationCommandHandler : IRequestHandler<CreateConversati
             Members = request.MemberIds.Select((memberId, index) => new ConversationMember
             {
                 UserId = memberId,
-                Role = index == 0 && request.Type == ConversationType.CustomGroup 
-                    ? MemberRole.Owner 
+                Role = index == 0 && request.Type == ConversationType.CustomGroup
+                    ? MemberRole.Owner
                     : MemberRole.Member,
                 JoinedAt = DateTime.UtcNow
             }).ToList()
         };
 
         var created = await _conversationRepository.CreateAsync(conversation, cancellationToken);
-        
+
         return MapToDto(created, request.CreatedBy);
     }
 
     private ConversationDto MapToDto(Conversation conversation, string currentUserId)
     {
         var currentMember = conversation.Members.FirstOrDefault(m => m.UserId == currentUserId);
-        
+
         return new ConversationDto
         {
             Id = conversation.Id,

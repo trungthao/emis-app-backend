@@ -1,11 +1,11 @@
+using System.Collections.Concurrent;
 using EMIS.Contracts.Events;
 using EMIS.EventBus.Abstractions;
-using Message.Domain.Entities;
-using Message.Domain.Repositories;
-using Message.Domain.Enums;
 using Message.Application.DTOs;
+using Message.Domain.Entities;
+using Message.Domain.Enums;
+using Message.Domain.Repositories;
 using Microsoft.Extensions.Logging;
-using System.Collections.Concurrent;
 
 namespace Message.API.EventHandlers;
 
@@ -19,12 +19,12 @@ public class MessagePersistenceHandler : IEventHandler<SendMessageRequestedEvent
     private readonly IConversationRepository _conversationRepository;
     private readonly IEventBus _eventBus;
     private readonly ILogger<MessagePersistenceHandler> _logger;
-    
+
     // Batch buffer
     private static readonly ConcurrentQueue<SendMessageRequestedEvent> _messageBuffer = new();
     private static readonly SemaphoreSlim _flushLock = new(1, 1);
     private static DateTime _lastFlushTime = DateTime.UtcNow;
-    
+
     // Configuration (sẽ move to appsettings)
     private const int BATCH_SIZE = 50; // Số messages tối đa trong 1 batch
     private const int FLUSH_INTERVAL_MS = 1000; // Flush mỗi 1 giây
@@ -52,11 +52,11 @@ public class MessagePersistenceHandler : IEventHandler<SendMessageRequestedEvent
 
             // Add to buffer
             _messageBuffer.Enqueue(@event);
-            
+
             // Check if should flush (batch size OR time interval)
             var shouldFlush = _messageBuffer.Count >= BATCH_SIZE ||
                               (DateTime.UtcNow - _lastFlushTime).TotalMilliseconds >= FLUSH_INTERVAL_MS;
-            
+
             if (shouldFlush)
             {
                 await FlushBatchAsync(cancellationToken);
@@ -82,7 +82,7 @@ public class MessagePersistenceHandler : IEventHandler<SendMessageRequestedEvent
         try
         {
             var batch = new List<SendMessageRequestedEvent>();
-            
+
             // Dequeue up to BATCH_SIZE messages
             while (batch.Count < BATCH_SIZE && _messageBuffer.TryDequeue(out var evt))
             {
@@ -107,7 +107,7 @@ public class MessagePersistenceHandler : IEventHandler<SendMessageRequestedEvent
             }
 
             stopwatch.Stop();
-            
+
             _logger.LogInformation(
                 "✅ Batch flush completed: {Count} messages in {ElapsedMs}ms (avg: {AvgMs}ms/message)",
                 batch.Count,

@@ -1,9 +1,9 @@
 using EMIS.Contracts.Events;
 using EMIS.EventBus.Abstractions;
+using MediatR;
 using Message.Application.Commands;
 using Message.Domain.Enums;
 using Message.Domain.Repositories;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Message.Application.EventHandlers;
@@ -52,13 +52,13 @@ public class StudentAssignedToClassEventHandler : IEventHandler<StudentAssignedT
 
             // Tạo danh sách member IDs (phụ huynh + giáo viên)
             var memberIds = new List<string>();
-            
+
             // Thêm phụ huynh
             foreach (var parentId in @event.ParentIds)
             {
                 memberIds.Add(parentId.ToString());
             }
-            
+
             // Thêm giáo viên
             foreach (var teacherId in @event.TeacherIds)
             {

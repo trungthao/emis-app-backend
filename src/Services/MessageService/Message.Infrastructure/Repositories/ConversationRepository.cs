@@ -1,8 +1,8 @@
-using MongoDB.Driver;
 using Message.Domain.Entities;
-using Message.Domain.Repositories;
 using Message.Domain.Enums;
+using Message.Domain.Repositories;
 using Message.Infrastructure.Persistence;
+using MongoDB.Driver;
 
 namespace Message.Infrastructure.Repositories;
 
@@ -23,9 +23,9 @@ public class ConversationRepository : IConversationRepository
     }
 
     public async Task<List<Conversation>> GetByUserIdAsync(
-        string userId, 
-        int skip = 0, 
-        int limit = 50, 
+        string userId,
+        int skip = 0,
+        int limit = 50,
         CancellationToken cancellationToken = default)
     {
         return await _context.Conversations
@@ -37,8 +37,8 @@ public class ConversationRepository : IConversationRepository
     }
 
     public async Task<Conversation?> FindDirectConversationAsync(
-        string userId1, 
-        string userId2, 
+        string userId1,
+        string userId2,
         CancellationToken cancellationToken = default)
     {
         return await _context.Conversations
@@ -51,7 +51,7 @@ public class ConversationRepository : IConversationRepository
     }
 
     public async Task<Conversation?> FindStudentGroupAsync(
-        Guid studentId, 
+        Guid studentId,
         CancellationToken cancellationToken = default)
     {
         return await _context.Conversations
@@ -62,7 +62,7 @@ public class ConversationRepository : IConversationRepository
     }
 
     public async Task<Conversation> CreateAsync(
-        Conversation conversation, 
+        Conversation conversation,
         CancellationToken cancellationToken = default)
     {
         await _context.Conversations.InsertOneAsync(conversation, cancellationToken: cancellationToken);
@@ -70,7 +70,7 @@ public class ConversationRepository : IConversationRepository
     }
 
     public async Task<bool> UpdateAsync(
-        Conversation conversation, 
+        Conversation conversation,
         CancellationToken cancellationToken = default)
     {
         conversation.UpdatedAt = DateTime.UtcNow;
@@ -80,8 +80,8 @@ public class ConversationRepository : IConversationRepository
     }
 
     public async Task<bool> DeleteAsync(
-        string id, 
-        string deletedBy, 
+        string id,
+        string deletedBy,
         CancellationToken cancellationToken = default)
     {
         var update = Builders<Conversation>.Update
@@ -91,13 +91,13 @@ public class ConversationRepository : IConversationRepository
 
         var result = await _context.Conversations
             .UpdateOneAsync(c => c.Id == id, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 
     public async Task<bool> UpdateLastMessageAsync(
-        string conversationId, 
-        LastMessage lastMessage, 
+        string conversationId,
+        LastMessage lastMessage,
         CancellationToken cancellationToken = default)
     {
         var update = Builders<Conversation>.Update
@@ -106,12 +106,12 @@ public class ConversationRepository : IConversationRepository
 
         var result = await _context.Conversations
             .UpdateOneAsync(c => c.Id == conversationId, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 
     public async Task<bool> IncrementMessageCountAsync(
-        string conversationId, 
+        string conversationId,
         CancellationToken cancellationToken = default)
     {
         var update = Builders<Conversation>.Update
@@ -120,14 +120,14 @@ public class ConversationRepository : IConversationRepository
 
         var result = await _context.Conversations
             .UpdateOneAsync(c => c.Id == conversationId, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 
     public async Task<bool> UpdateUnreadCountAsync(
-        string conversationId, 
-        string userId, 
-        int increment, 
+        string conversationId,
+        string userId,
+        int increment,
         CancellationToken cancellationToken = default)
     {
         var filter = Builders<Conversation>.Filter.And(
@@ -141,13 +141,13 @@ public class ConversationRepository : IConversationRepository
 
         var result = await _context.Conversations
             .UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 
     public async Task<bool> ResetUnreadCountAsync(
-        string conversationId, 
-        string userId, 
+        string conversationId,
+        string userId,
         CancellationToken cancellationToken = default)
     {
         var filter = Builders<Conversation>.Filter.And(
@@ -162,13 +162,13 @@ public class ConversationRepository : IConversationRepository
 
         var result = await _context.Conversations
             .UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 
     public async Task<bool> AddMemberAsync(
-        string conversationId, 
-        ConversationMember member, 
+        string conversationId,
+        ConversationMember member,
         CancellationToken cancellationToken = default)
     {
         var update = Builders<Conversation>.Update
@@ -177,13 +177,13 @@ public class ConversationRepository : IConversationRepository
 
         var result = await _context.Conversations
             .UpdateOneAsync(c => c.Id == conversationId, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 
     public async Task<bool> RemoveMemberAsync(
-        string conversationId, 
-        string userId, 
+        string conversationId,
+        string userId,
         CancellationToken cancellationToken = default)
     {
         var filter = Builders<Conversation>.Filter.And(
@@ -198,13 +198,13 @@ public class ConversationRepository : IConversationRepository
 
         var result = await _context.Conversations
             .UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 
     public async Task<bool> UpdateLastSeenAsync(
-        string conversationId, 
-        string userId, 
+        string conversationId,
+        string userId,
         CancellationToken cancellationToken = default)
     {
         var filter = Builders<Conversation>.Filter.And(
@@ -217,7 +217,7 @@ public class ConversationRepository : IConversationRepository
 
         var result = await _context.Conversations
             .UpdateOneAsync(filter, update, cancellationToken: cancellationToken);
-        
+
         return result.ModifiedCount > 0;
     }
 }

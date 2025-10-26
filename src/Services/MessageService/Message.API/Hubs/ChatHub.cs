@@ -28,10 +28,10 @@ public class ChatHub : Hub
     public async Task JoinConversation(string conversationId)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, conversationId);
-        
+
         _logger.LogInformation(
-            "User {UserId} joined conversation {ConversationId}", 
-            GetUserId(), 
+            "User {UserId} joined conversation {ConversationId}",
+            GetUserId(),
             conversationId);
     }
 
@@ -41,10 +41,10 @@ public class ChatHub : Hub
     public async Task LeaveConversation(string conversationId)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, conversationId);
-        
+
         _logger.LogInformation(
-            "User {UserId} left conversation {ConversationId}", 
-            GetUserId(), 
+            "User {UserId} left conversation {ConversationId}",
+            GetUserId(),
             conversationId);
     }
 
@@ -80,9 +80,9 @@ public class ChatHub : Hub
     public async Task MarkAsRead(string conversationId, string messageId)
     {
         var userId = GetUserId();
-        
+
         // TODO: Call repository để mark message as read
-        
+
         // Notify other users
         await Clients.OthersInGroup(conversationId).SendAsync("MessageRead", new
         {
@@ -99,13 +99,13 @@ public class ChatHub : Hub
     public override async Task OnConnectedAsync()
     {
         var userId = GetUserId();
-        
-        _logger.LogInformation("User {UserId} connected with ConnectionId {ConnectionId}", 
+
+        _logger.LogInformation("User {UserId} connected with ConnectionId {ConnectionId}",
             userId, Context.ConnectionId);
 
         // Notify others that user is online
         await Clients.Others.SendAsync("UserOnline", userId);
-        
+
         await base.OnConnectedAsync();
     }
 
@@ -115,20 +115,20 @@ public class ChatHub : Hub
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         var userId = GetUserId();
-        
+
         _logger.LogInformation("User {UserId} disconnected", userId);
 
         // Notify others that user is offline
         await Clients.Others.SendAsync("UserOffline", userId);
-        
+
         await base.OnDisconnectedAsync(exception);
     }
 
     private string GetUserId()
     {
         // Lấy userId từ claim trong JWT token
-        return Context.User?.FindFirst("sub")?.Value 
-            ?? Context.User?.FindFirst("userId")?.Value 
+        return Context.User?.FindFirst("sub")?.Value
+            ?? Context.User?.FindFirst("userId")?.Value
             ?? Context.ConnectionId;
     }
 }

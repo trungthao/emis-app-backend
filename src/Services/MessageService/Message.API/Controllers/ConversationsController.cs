@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Message.Application.Commands;
-using Message.Application.Queries;
 using Message.Application.DTOs;
+using Message.Application.Queries;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Message.API.Controllers;
 
@@ -103,7 +103,7 @@ public class ConversationsController : ControllerBase
             }
 
             var result = await _mediator.Send(command);
-            
+
             // ✅ Return 202 Accepted (instead of 201 Created)
             // Message chưa được persist to MongoDB, chỉ mới publish to Kafka
             return Accepted(result); // 202 Accepted

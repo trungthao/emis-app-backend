@@ -9,12 +9,12 @@ public enum UserType
     /// Giáo viên
     /// </summary>
     Teacher = 1,
-    
+
     /// <summary>
     /// Phụ huynh
     /// </summary>
     Parent = 2,
-    
+
     /// <summary>
     /// Quản trị viên
     /// </summary>

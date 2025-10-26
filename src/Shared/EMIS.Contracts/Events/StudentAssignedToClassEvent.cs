@@ -8,7 +8,7 @@ namespace EMIS.Contracts.Events;
 public class StudentAssignedToClassEvent : BaseEvent
 {
     public override string EventType => nameof(StudentAssignedToClassEvent);
-    
+
     public Guid StudentId { get; set; }
     public Guid ClassId { get; set; }
     public string StudentName { get; set; } = string.Empty;

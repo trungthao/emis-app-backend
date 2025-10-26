@@ -9,12 +9,12 @@ public enum MemberRole
     /// Thành viên thông thường
     /// </summary>
     Member = 1,
-    
+
     /// <summary>
     /// Quản trị viên nhóm (có thể thêm/xóa thành viên, đổi tên nhóm)
     /// </summary>
     Admin = 2,
-    
+
     /// <summary>
     /// Người tạo nhóm
     /// </summary>

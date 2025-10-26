@@ -16,15 +16,15 @@ public class GetConversationsQueryHandler : IRequestHandler<GetConversationsQuer
     public async Task<List<ConversationDto>> Handle(GetConversationsQuery request, CancellationToken cancellationToken)
     {
         var conversations = await _conversationRepository.GetByUserIdAsync(
-            request.UserId, 
-            request.Skip, 
-            request.Limit, 
+            request.UserId,
+            request.Skip,
+            request.Limit,
             cancellationToken);
 
         return conversations.Select(c =>
         {
             var currentMember = c.Members.FirstOrDefault(m => m.UserId == request.UserId);
-            
+
             return new ConversationDto
             {
                 Id = c.Id,
